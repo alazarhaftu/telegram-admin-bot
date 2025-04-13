@@ -1,86 +1,65 @@
-import random
+from pyrogram import Client
+from pyrogram.types import ChatPrivileges
 import asyncio
-import os
-from telethon.sync import TelegramClient
-from telethon.tl.functions.channels
-from telethon.tl.types import ChatAdminRights
+import random
 from keep_alive import keep_alive
 
-keep_alive()
+# Replace these with your actual values
+API_ID = int("YOUR_API_ID")
+API_HASH = "YOUR_API_HASH"
 
-api_id = int(os.environ['22367750'])
-api_hash = os.environ['d66df1ff8f59b26a8542902ed6070d8f']
+app = Client("admin-bot", api_id=API_ID, api_hash=API_HASH)
 
-channel_a_list = ['ethiocrypto_433', 'man_united_ethio_fans', 'manchester_unitedfanns']  # Replace with your channels
-channel_b = 'fothfu'  # Replace with your target channel
+# List of channel usernames or IDs
+CHANNELS = ["channel_username_1", "channel_username_2", "channel_username_3"]
 
-client = TelegramClient('session', api_id, api_hash)
+# Admin privileges to grant temporarily
+admin_rights = ChatPrivileges(
+    can_change_info=True,
+    can_delete_messages=True,
+    can_invite_users=True,
+    can_restrict_members=True,
+    can_pin_messages=True,
+    can_promote_members=False,
+    can_manage_video_chats=True
+)
 
-async def get_valid_users_from_channel(channel_name):
-    try:
-        entity = await client.get_entity(channel_name)
-        members = await client.get_participants(entity, limit=1000)
+# No privileges (to demote)
+no_rights = ChatPrivileges(
+    can_change_info=False,
+    can_delete_messages=False,
+    can_invite_users=False,
+    can_restrict_members=False,
+    can_pin_messages=False,
+    can_promote_members=False,
+    can_manage_video_chats=False
+)
 
-        valid_users = []
-        for user in members:
-            if user.bot or user.deleted or not user.username:
-                continue
-            valid_users.append(user)
-
-        return valid_users
-    except Exception as e:
-        print(f"Error in {channel_name}: {e}")
-        return []
-
-async def main():
-    await client.start()
-    target = await client.get_entity(channel_b)
-
-    all_users = []
-    for chan in channel_a_list:
-        users = await get_valid_users_from_channel(chan)
-        all_users.extend(users)
-
-    unique_users = {u.id: u for u in all_users}.values()
-    unique_users = list(unique_users)
-    random.shuffle(unique_users)
-
-    admin_rights = ChatAdminRights(
-        post_messages=True,
-        delete_messages=True,
-        ban_users=True,
-        invite_users=True,
-        add_admins=False,
-        change_info=False,
-        pin_messages=True,
-    )
-
-    empty_rights = ChatAdminRights()
-    used_ids = set()
+async def cycle_admins():
+    await app.start()
 
     while True:
-        available = [u for u in unique_users if u.id not in used_ids]
-
-        if not available:
-            used_ids.clear()
-            random.shuffle(unique_users)
-            continue
-
-        user = random.choice(available)
-        used_ids.add(user.id)
+        # Choose a random channel from the list
+        channel = random.choice(CHANNELS)
 
         try:
-            await client(EditAdmin(target, user.id, admin_rights, rank="Rotating Admin"))
-            print(f"Promoted: {user.username}")
-            await asyncio.sleep(3)
+            # Get a list of participants
+            async for member in app.get_chat_members(channel):
+                user_id = member.user.id
 
-            await client(EditAdmin(target, user.id, empty_rights, rank=""))
-            print(f"Demoted: {user.username}")
-            await asyncio.sleep(3)
-
+                print(f"Promoting {user_id} in {channel}")
+                await app.promote_chat_member(channel, user_id, admin_rights)
+                await asyncio.sleep(3)
+                print(f"Demoting {user_id} in {channel}")
+                await app.promote_chat_member(channel, user_id, no_rights)
+                await asyncio.sleep(3)
+                break  # Only process 1 user per cycle
         except Exception as e:
-            print(f"Error with {user.username}: {e}")
-            continue
+            print(f"Error in {channel}: {e}")
+            await asyncio.sleep(5)
 
-with client:
-    client.loop.run_until_complete(main())
+    await app.stop()
+
+if name == "main":
+    keep_alive()  # Start Flask keep-alive
+    asyncio.run(cycle_admins())
