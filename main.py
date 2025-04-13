@@ -8,11 +8,11 @@ from keep_alive import keep_alive
 
 keep_alive()
 
-api_id = int(os.environ['API_ID'])
-api_hash = os.environ['API_HASH']
+api_id = int(os.environ['22367750'])
+api_hash = os.environ['d66df1ff8f59b26a8542902ed6070d8f']
 
-channel_a_list = ['channelOne', 'channelTwo', 'channelThree']  # Replace with your channels
-channel_b = 'targetChannel'  # Replace with your target channel
+channel_a_list = ['ethiocrypto_433', 'man_united_ethio_fans', 'manchester_unitedfanns']  # Replace with your channels
+channel_b = 'fothfu'  # Replace with your target channel
 
 client = TelegramClient('session', api_id, api_hash)
 
