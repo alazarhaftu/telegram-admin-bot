@@ -2,7 +2,7 @@ import random
 import asyncio
 import os
 from telethon.sync import TelegramClient
-from telethon.tl.functions.channels import EditAdmin
+from telethon.tl.functions.channels
 from telethon.tl.types import ChatAdminRights
 from keep_alive import keep_alive
 
