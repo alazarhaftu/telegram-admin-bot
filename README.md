@@ -14,11 +14,15 @@ But you can also deploy it on your computer by using only the main.py file, to d
 
 1. Create a folder named telegram_admin_bot and put main.py inside it.
 2. Download Python from python.org.
-3. Open CMD in that folder, and install the libraries in your terminal. *Copy the code below and paste it into CMD for Windows users*
+3. Open CMD in that folder, and install the libraries in your terminal. Copy the code below and paste it into CMD for Windows users
+   
       *pip install pyrogram tgcrypto*
-4. Run the program.
+   
+5. Run the program.
+   
       *python main.py*
-5. Press Enter, and this starts your bot.
+   
+7. Press Enter, and this starts your bot.
    this will be processed in the background(you cannot access the bot in your telegram account)
 
    
