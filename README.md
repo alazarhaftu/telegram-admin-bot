@@ -7,14 +7,14 @@ The process will continue until the bot has collected all users with usernames(U
 You can modify the code based on the comments provided.
 Go to telegram.org to generate your api_id and api_hash, and copy and paste them into the code.
 Replace the channels with your 3 channels' usernames, so  a user will pass from on channel to the other.
-The telegram account running the bot must be a member or admin of those channels of those channels.
+The telegram account running the bot must be a member or admin of those channels.
 If you want to deploy the bot on Replit, just use the 3 files there will be no other process. 
 
 But you can also deploy it on your computer by using only the main.py file, to do that:
 
-1. Create a folder named telegram_admin_bot and put main.py inside it.
-2. Download Python from python.org.
-3. Open CMD in that folder, and install the libraries in your terminal. Copy the code below and paste it into CMD for Windows users
+1. Download and install Python from python.org.
+2. Create a folder named telegram_admin_bot and put main.py inside it.
+3. Open CMD in that folder, and install the libraries in your terminal. Copy the code below and paste it into CMD for Windows users.
    
       *pip install pyrogram tgcrypto*
    
